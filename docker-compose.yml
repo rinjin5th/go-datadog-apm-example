@@ -1,0 +1,37 @@
+version: '3'
+services:
+  front: 
+    build: .
+    ports:
+      - '8080:8080'
+    volumes:
+      - .:/usr/src/app
+    links:
+      - api-alpha
+      - datadog
+    environment:
+      - APP_NAME=front
+  api-alpha: 
+    build: .
+    volumes:
+      - .:/usr/src/app
+    links:
+      - api-beta
+      - datadog
+    environment:
+      - APP_NAME=api-alpha
+  api-beta: 
+    build: .
+    volumes:
+      - .:/usr/src/app
+    links:
+      - datadog
+    environment:
+      - APP_NAME=api-beta
+  datadog:
+    image: datadog/agent
+    environment:
+      - DD_APM_ENABLED=true
+      - DD_BIND_HOST=0.0.0.0
+      - DD_API_KEY
+  
